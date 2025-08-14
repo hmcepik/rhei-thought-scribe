@@ -20,13 +20,13 @@ const VoiceRecorder = () => {
 
   // Keywords for auto-tagging
   const keywords = {
-    'Marketing': ['marketing', 'campaign', 'brand', 'customer', 'sales', 'promotion', 'advertising'],
-    'Engineering': ['code', 'development', 'software', 'technical', 'bug', 'programming', 'api'],
-    'Meeting': ['meeting', 'discussion', 'agenda', 'notes', 'decision', 'action', 'follow-up'],
-    'Project': ['project', 'timeline', 'milestone', 'deadline', 'task', 'deliverable'],
-    'Finance': ['budget', 'cost', 'revenue', 'financial', 'money', 'expense', 'profit'],
-    'HR': ['team', 'hiring', 'employee', 'training', 'performance', 'review', 'staff'],
-    'Personal': ['idea', 'thought', 'reminder', 'todo', 'personal', 'note'],
+    'Marketing': ['marketing', 'campaign', 'brand', 'customer', 'sales', 'promotion', 'advertising', 'social media', 'content', 'seo', 'analytics'],
+    'Engineering': ['code', 'development', 'software', 'technical', 'bug', 'programming', 'api', 'database', 'frontend', 'backend', 'deployment'],
+    'Meeting': ['meeting', 'discussion', 'agenda', 'notes', 'decision', 'action', 'follow-up', 'call', 'conference', 'sync', 'standup'],
+    'Project': ['project', 'timeline', 'milestone', 'deadline', 'task', 'deliverable', 'presentation', 'powerpoint', 'slides', 'demo', 'proposal'],
+    'Finance': ['budget', 'cost', 'revenue', 'financial', 'money', 'expense', 'profit', 'invoice', 'payment', 'pricing'],
+    'HR': ['team', 'hiring', 'employee', 'training', 'performance', 'review', 'staff', 'onboarding', 'interview'],
+    'Personal': ['idea', 'thought', 'reminder', 'todo', 'personal', 'note', 'remember', 'inspiration', 'brainstorm'],
   };
 
   useEffect(() => {
