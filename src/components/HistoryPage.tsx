@@ -23,6 +23,7 @@ const HistoryPage = () => {
     if (savedNotes) {
       const parsedNotes = JSON.parse(savedNotes).map((note: any) => ({
         ...note,
+        title: note.title || `Note - ${new Date(note.timestamp).toLocaleString()}`, // Provide default title for old notes
         timestamp: new Date(note.timestamp)
       }));
       setNotes(parsedNotes);
@@ -31,7 +32,7 @@ const HistoryPage = () => {
 
   const filteredNotes = notes.filter(note => {
     return !searchTerm || 
-      note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (note.title && note.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
       note.transcription.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (note.summary && note.summary.toLowerCase().includes(searchTerm.toLowerCase()));
   });
