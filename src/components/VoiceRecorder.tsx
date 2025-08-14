@@ -17,7 +17,6 @@ const VoiceRecorder = () => {
   const [summary, setSummary] = useState("");
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Keywords for auto-tagging
   const keywords = {
@@ -64,7 +63,6 @@ const VoiceRecorder = () => {
 
       if (finalTranscript) {
         setTranscription(prev => prev + finalTranscript);
-        resetSilenceTimer();
       }
       
       setCurrentTranscript(interimTranscript);
@@ -79,9 +77,6 @@ const VoiceRecorder = () => {
     recognition.onend = () => {
       setIsRecording(false);
       setCurrentTranscript("");
-      if (silenceTimerRef.current) {
-        clearTimeout(silenceTimerRef.current);
-      }
     };
 
     recognitionRef.current = recognition;
@@ -90,24 +85,9 @@ const VoiceRecorder = () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-      if (silenceTimerRef.current) {
-        clearTimeout(silenceTimerRef.current);
-      }
     };
   }, []);
 
-  const resetSilenceTimer = () => {
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current);
-    }
-    
-    silenceTimerRef.current = setTimeout(() => {
-      if (isRecording && recognitionRef.current) {
-        recognitionRef.current.stop();
-        toast.info("Recording stopped due to silence");
-      }
-    }, 3000); // 3 seconds of silence
-  };
 
   const startRecording = () => {
     if (recognitionRef.current && !isRecording) {
@@ -116,16 +96,12 @@ const VoiceRecorder = () => {
       setGeneratedTags([]);
       setSummary("");
       recognitionRef.current.start();
-      resetSilenceTimer();
     }
   };
 
   const stopRecording = () => {
     if (recognitionRef.current && isRecording) {
       recognitionRef.current.stop();
-      if (silenceTimerRef.current) {
-        clearTimeout(silenceTimerRef.current);
-      }
     }
   };
 
@@ -233,7 +209,7 @@ const VoiceRecorder = () => {
         <div className="text-center">
           <p className="text-lg font-medium">
             {isRecording ? (
-              <span className="text-recording-active">🔴 Recording... (Auto-stops after 3s of silence)</span>
+              <span className="text-recording-active">🔴 Recording...</span>
             ) : transcription ? (
               <span className="text-rhei-success">✅ Recording complete</span>
             ) : (
@@ -308,7 +284,7 @@ const VoiceRecorder = () => {
             <ul className="text-sm text-muted-foreground space-y-1">
               <li>• Click the record button to start voice recording</li>
               <li>• Speak clearly - transcription appears in real-time</li>
-              <li>• Recording auto-stops after 3 seconds of silence</li>
+              <li>• Recording continues until you click stop</li>
               <li>• Edit transcription if needed, then save your note</li>
               <li>• Tags and summaries are generated automatically</li>
             </ul>
