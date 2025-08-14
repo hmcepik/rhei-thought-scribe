@@ -1,13 +1,13 @@
 import RHEIHeader from "@/components/RHEIHeader";
-import VoiceRecorder from "@/components/VoiceRecorder";
+import HistoryPage from "@/components/HistoryPage";
 
-const Index = () => {
+const History = () => {
   return (
     <div className="min-h-screen bg-background">
       <RHEIHeader />
-      <VoiceRecorder />
+      <HistoryPage />
     </div>
   );
 };
 
-export default Index;
+export default History;

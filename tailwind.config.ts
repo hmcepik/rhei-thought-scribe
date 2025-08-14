@@ -52,6 +52,17 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				rhei: {
+					primary: 'hsl(var(--rhei-primary))',
+					'primary-light': 'hsl(var(--rhei-primary-light))',
+					'primary-dark': 'hsl(var(--rhei-primary-dark))',
+					success: 'hsl(var(--rhei-success))',
+					warning: 'hsl(var(--rhei-warning))'
+				},
+				recording: {
+					active: 'hsl(var(--recording-active))',
+					inactive: 'hsl(var(--recording-inactive))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
