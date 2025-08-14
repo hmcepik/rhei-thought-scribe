@@ -1,73 +1,170 @@
-# Welcome to your Lovable project
+# RHEI Voice Notes - AI Product Builder Assessment
 
-## Project info
+> Transform speech into actionable notes at the speed of thought
 
-**URL**: https://lovable.dev/projects/ca79246d-309b-4272-b5b0-0e6f37daaf7f
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Available-brightgreen)](https://rhei-thought-to-scribe.lovable.app/)
+[![GitHub](https://img.shields.io/badge/📂_Source_Code-GitHub-blue)](https://github.com/hmcepik/rhei-thought-scribe/tree/main)
 
-## How can I edit this code?
+## 🎯 Project Overview
 
-There are several ways of editing your application.
+RHEI Voice Notes is an AI-powered productivity tool that eliminates transcription bottlenecks by enabling employees to capture, transcribe, and organize spoken ideas instantly. Built as part of RHEI's Made for Teams initiative, it transforms voice recordings into searchable, organized notes with automatic AI-powered summaries.
 
-**Use Lovable**
+**Problem Solved:** Employees waste time manually transcribing communications, rely on external tools that break workflows, or skip documentation entirely - creating knowledge silos and operational inefficiencies.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ca79246d-309b-4272-b5b0-0e6f37daaf7f) and start prompting.
+**Solution:** A workflow multiplier that captures ideas at the speed of thought and channels them into existing communication patterns.
 
-Changes made via Lovable will be committed automatically to this repo.
+## ✨ Key Features
 
-**Use your preferred IDE**
+- 🎙️ **Real-time Speech Transcription** - Browser-native voice recognition with instant feedback
+- 🤖 **AI-Powered Summaries** - Automatic bullet-point summaries for longer recordings
+- 🔍 **Full-Text Search** - Search across all notes, titles, and summaries
+- ✏️ **Editable Content** - Edit transcriptions and titles inline
+- 📱 **Mobile-First Design** - Responsive interface for capturing ideas anywhere
+- 🎨 **RHEI Brand Integration** - Custom color scheme matching RHEI identity
+- 💾 **Privacy-First Storage** - Local storage with zero breach risk
+- 📋 **One-Click Copy** - Copy notes to clipboard for easy sharing
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Quick Start
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
+- Node.js 16+ 
+- Modern browser with Web Speech API support (Chrome, Edge, Safari)
 
-Follow these steps:
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/hmcepik/rhei-thought-scribe.git
+cd rhei-thought-scribe
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open [http://localhost:8080](http://localhost:8080) and grant microphone permissions when prompted.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### One-Click Demo
+🔗 **Live Demo:** [https://rhei-thought-to-scribe.lovable.app/](https://rhei-thought-to-scribe.lovable.app/)
 
-**Use GitHub Codespaces**
+## 🛠 Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **Frontend:** React 18.3.1 + TypeScript + TailwindCSS
+- **Build Tool:** Vite for lightning-fast development
+- **Speech Recognition:** Web Speech Recognition API (browser-native)
+- **Storage:** localStorage (privacy-first approach)
+- **Deployment:** Lovable + Supabase platform
+- **UI Components:** shadcn/ui for consistent design
 
-## What technologies are used for this project?
+**Stack Rationale:** This combination provides optimal balance of development speed, runtime reliability, and future scalability while eliminating procurement friction for immediate validation.
 
-This project is built with:
+## 🏗 Architecture Decisions
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### MVP Strategy: Browser-Native First
+- **Web Speech Recognition API** for zero-latency, cost-free transcription
+- **Immediate user feedback** essential for adoption
+- **Zero procurement friction** enables instant testing
 
-## How can I deploy this project?
+### V2 Migration Path
+- **Google Cloud Speech-to-Text:** Enterprise reliability, real-time streaming
+- **OpenAI Whisper:** 4x cost reduction, superior accuracy
+- **Strategic validation:** Test user needs first, optimize economics second
 
-Simply open [Lovable](https://lovable.dev/projects/ca79246d-309b-4272-b5b0-0e6f37daaf7f) and click on Share -> Publish.
+### Data Architecture
+- **Privacy-first localStorage** eliminates breach risks
+- **Zero external dependencies** for sensitive voice data
+- **Complete user control** over personal note history
 
-## Can I connect a custom domain to my Lovable project?
+## 🎨 User Experience
 
-Yes, you can!
+### Core Workflow
+1. **Record** → Click large circular button, speak naturally
+2. **Transcribe** → Real-time text appears as you speak
+3. **Edit** → Refine transcription and add context
+4. **Save** → Auto-generated title with timestamp
+5. **Organize** → Search, filter, and manage note history
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Mobile-Optimized
+- Touch-friendly interface for meeting contexts
+- Offline capability for unreliable WiFi
+- Background recording while switching apps
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 📊 Success Metrics
+
+- **Transcription Accuracy:** >90% for clear speech
+- **Processing Speed:** Sub-second response times
+- **User Experience:** Intuitive interface requiring no training
+- **Adoption Goal:** Zero learning curve with immediate productivity gains
+
+## 🔧 Browser Compatibility
+
+| Browser | Support Level | Notes |
+|---------|---------------|-------|
+| Chrome | ✅ Full | Recommended for best experience |
+| Edge | ✅ Full | Complete Web Speech API support |
+| Safari | ✅ Full | iOS and macOS compatible |
+| Firefox | ❌ Limited | Web Speech API constraints |
+
+## 🚧 Known Limitations & Roadmap
+
+### Current Constraints
+- Browser dependency for Web Speech API
+- Performance varies with microphone quality
+- localStorage limit (~5-10MB)
+- Single-user focus (no team collaboration)
+
+### V2 Roadmap for Made for Teams
+- **Enhanced AI:** Google Cloud Speech-to-Text + OpenAI Whisper migration
+- **Team Features:** Shared note libraries, collaborative editing
+- **Integrations:** Direct Slack posting, email sharing, calendar integration
+- **Advanced Capabilities:** Multi-speaker identification, meeting transcription
+- **Mobile:** PWA installation, offline sync, push notifications
+- **Templates:** Meeting notes, voice memos, project updates
+
+## 🔐 Privacy & Security
+
+- **Fully client-side operation** - no server-side data storage
+- **Permission-based access** - explicit microphone permission required
+- **Local data control** - users own their transcription history
+- **No tracking** - zero analytics or external scripts
+
+## 🎯 Product Strategy for RHEI Integration
+
+### Daily Workflow Integration
+- Seamless capture during meetings and brainstorming
+- Immediate editing and refinement capabilities
+- Search across historical context for decision-making
+- Copy/paste integration with existing tools
+
+### Adoption Features
+- Auto-generated titles with timestamps
+- Familiar UI patterns minimizing learning curves
+- Real-time feedback building user confidence
+- Confirmation dialogs preventing accidental data loss
+
+## 💼 Business Impact
+
+### ROI Projection
+- **Target:** 50 employees × 20 minutes daily usage
+- **Value Creation:** 1000+ daily productivity minutes
+- **Implementation Cost:** Zero (browser-native APIs)
+- **Compelling business case** for enhanced feature investment
+
+### Risk Management
+- Browser-native implementation eliminates vendor lock-in
+- Local-first storage prevents privacy concerns
+- Modular architecture supports evolution without breaking workflows
+
+## 🤝 Contributing
+
+This project was built as part of RHEI's AI Product Builder technical assessment, demonstrating:
+- Strategic product thinking for internal productivity tools
+- Rapid prototyping with enterprise scalability planning
+- User-centric design with measurable business impact
+
+---
+
+**Built by:** Hannah Cepik | AI Product Builder Assessment  
+**For:** RHEI Made for Teams Initiative  
+**Demo:** [rhei-thought-to-scribe.lovable.app](https://rhei-thought-to-scribe.lovable.app/)
