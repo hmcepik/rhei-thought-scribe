@@ -120,6 +120,7 @@ const VoiceRecorder = () => {
     
     const note: VoiceNote = {
       id: Date.now().toString(),
+      title: `Note - ${new Date().toLocaleString()}`,
       transcription: transcription.trim(),
       summary: noteSummary || undefined,
       tags: [],

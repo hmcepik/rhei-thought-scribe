@@ -10,9 +10,9 @@ import { VoiceNote } from "@/types/VoiceNote";
 const HistoryPage = () => {
   const [notes, setNotes] = useState<VoiceNote[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  
   const [editingNote, setEditingNote] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+  const [editTitle, setEditTitle] = useState("");
 
   useEffect(() => {
     loadNotes();
@@ -31,11 +31,10 @@ const HistoryPage = () => {
 
   const filteredNotes = notes.filter(note => {
     return !searchTerm || 
+      note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       note.transcription.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (note.summary && note.summary.toLowerCase().includes(searchTerm.toLowerCase()));
   });
-
-  
 
   const deleteNote = (id: string) => {
     if (window.confirm("Are you sure you want to delete this note?")) {
@@ -49,27 +48,29 @@ const HistoryPage = () => {
   const startEditing = (note: VoiceNote) => {
     setEditingNote(note.id);
     setEditText(note.transcription);
+    setEditTitle(note.title);
   };
 
   const saveEdit = (id: string) => {
     const updatedNotes = notes.map(note => 
-      note.id === id ? { ...note, transcription: editText } : note
+      note.id === id ? { ...note, title: editTitle, transcription: editText } : note
     );
     setNotes(updatedNotes);
     localStorage.setItem('rhei-voice-notes', JSON.stringify(updatedNotes));
     setEditingNote(null);
     setEditText("");
+    setEditTitle("");
     toast.success("Note updated successfully");
   };
 
   const cancelEdit = () => {
     setEditingNote(null);
     setEditText("");
+    setEditTitle("");
   };
 
-
   const copyToClipboard = async (note: VoiceNote) => {
-    const content = `Voice Note - ${note.timestamp.toLocaleString()}
+    const content = `${note.title} - ${note.timestamp.toLocaleString()}
 
 Transcription:
 ${note.transcription}
@@ -77,7 +78,7 @@ ${note.transcription}
 ${note.summary ? `Summary:
 ${note.summary}
 
-` : ''}${note.tags.length > 0 ? `Tags: ${note.tags.join(', ')}` : ''}`;
+` : ''}`;
 
     try {
       await navigator.clipboard.writeText(content);
@@ -131,7 +132,7 @@ ${note.summary}
           </div>
         </div>
 
-        {/* Search and Filters */}
+        {/* Search */}
         <Card>
           <CardContent className="p-4">
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
@@ -139,7 +140,7 @@ ${note.summary}
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search notes and summaries..."
+                    placeholder="Search titles, notes and summaries..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"
@@ -165,7 +166,7 @@ ${note.summary}
                   <>
                     <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <h3 className="text-lg font-medium mb-2">No matching notes</h3>
-                    <p>Try adjusting your search terms or filters.</p>
+                    <p>Try adjusting your search terms.</p>
                   </>
                 )}
               </div>
@@ -177,10 +178,23 @@ ${note.summary}
               <Card key={note.id} className="note-card">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
-                      <span>{note.timestamp.toLocaleString()}</span>
+                    <div className="flex-1">
+                      {editingNote === note.id ? (
+                        <Input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          className="text-lg font-semibold mb-2"
+                          placeholder="Note title..."
+                        />
+                      ) : (
+                        <h3 className="text-lg font-semibold mb-2">{note.title}</h3>
+                      )}
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                        <Calendar className="w-4 h-4" />
+                        <span>{note.timestamp.toLocaleString()}</span>
+                      </div>
                     </div>
+                    
                     <div className="flex space-x-1">
                       <Button
                         variant="ghost"

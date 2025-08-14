@@ -1,5 +1,6 @@
 export interface VoiceNote {
   id: string;
+  title: string;
   transcription: string;
   summary?: string;
   tags: string[];
