@@ -37,9 +37,9 @@ All colors MUST be HSL.
     --ring: 262 80% 45%;
 
     /* RHEI Brand Colors */
-    --rhei-primary: 262 80% 45%;
-    --rhei-primary-light: 262 60% 65%;
-    --rhei-primary-dark: 262 90% 35%;
+    --rhei-primary: 231 76% 60%;
+    --rhei-primary-light: 240 83% 70%;
+    --rhei-primary-dark: 231 90% 45%;
     --rhei-success: 142 76% 36%;
     --rhei-warning: 38 92% 50%;
     --recording-active: 0 84% 60%;
