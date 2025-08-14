@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Mic, MicOff, Save, Loader2 } from "lucide-react";
+import { Mic, MicOff, Save, Loader2, Wifi, WifiOff } from "lucide-react";
 import { toast } from "sonner";
 import { VoiceNote } from "@/types/VoiceNote";
 import "@/types/VoiceNote"; // Import speech recognition types
@@ -14,9 +14,34 @@ const VoiceRecorder = () => {
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [summary, setSummary] = useState("");
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [networkError, setNetworkError] = useState(false);
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
+
+  useEffect(() => {
+    // Monitor network status
+    const handleOnline = () => {
+      setIsOnline(true);
+      setNetworkError(false);
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      if (isRecording) {
+        stopRecording();
+        toast.error("Lost internet connection. Recording stopped.");
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [isRecording]);
 
   useEffect(() => {
     // Check if speech recognition is supported
@@ -34,6 +59,7 @@ const VoiceRecorder = () => {
 
     recognition.onstart = () => {
       setIsRecording(true);
+      setNetworkError(false);
       toast.success("Recording started - speak clearly");
     };
 
@@ -59,8 +85,20 @@ const VoiceRecorder = () => {
 
     recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
-      toast.error(`Recording error: ${event.error}`);
       setIsRecording(false);
+      setNetworkError(true);
+      
+      if (event.error === 'network') {
+        toast.error("Network error: Please check your internet connection and try again.");
+      } else if (event.error === 'no-speech') {
+        toast.error("No speech detected. Please speak louder or closer to the microphone.");
+      } else if (event.error === 'audio-capture') {
+        toast.error("Microphone not accessible. Please check permissions.");
+      } else if (event.error === 'not-allowed') {
+        toast.error("Microphone access denied. Please allow microphone permission.");
+      } else {
+        toast.error(`Recording error: ${event.error}. Please try again.`);
+      }
     };
 
     recognition.onend = () => {
@@ -79,10 +117,16 @@ const VoiceRecorder = () => {
 
 
   const startRecording = () => {
+    if (!isOnline) {
+      toast.error("No internet connection. Speech recognition requires an active internet connection.");
+      return;
+    }
+
     if (recognitionRef.current && !isRecording) {
       setTranscription("");
       setCurrentTranscript("");
       setSummary("");
+      setNetworkError(false);
       
       // Request microphone permission explicitly on mobile
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -187,12 +231,27 @@ const VoiceRecorder = () => {
         </div>
 
         {/* Status */}
-        <div className="text-center">
+        <div className="text-center space-y-2">
+          <div className="flex items-center justify-center space-x-2">
+            {isOnline ? (
+              <Wifi className="w-4 h-4 text-rhei-success" />
+            ) : (
+              <WifiOff className="w-4 h-4 text-destructive" />
+            )}
+            <span className="text-sm text-muted-foreground">
+              {isOnline ? "Connected" : "No Internet"}
+            </span>
+          </div>
+          
           <p className="text-lg font-medium">
             {isRecording ? (
               <span className="text-recording-active">🔴 Recording...</span>
             ) : transcription ? (
               <span className="text-rhei-success">✅ Recording complete</span>
+            ) : networkError ? (
+              <span className="text-destructive">❌ Network error - check connection</span>
+            ) : !isOnline ? (
+              <span className="text-destructive">📶 Internet required for recording</span>
             ) : (
               <span className="text-muted-foreground">Click to start recording</span>
             )}
@@ -251,10 +310,12 @@ const VoiceRecorder = () => {
           <CardContent className="p-4">
             <h4 className="font-medium mb-2">How to use:</h4>
             <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• <strong>Internet required:</strong> Voice recognition needs active connection</li>
               <li>• Click the record button to start voice recording</li>
               <li>• Allow microphone access when prompted</li>
               <li>• Speak clearly - transcription appears in real-time</li>
               <li>• On mobile: Use Chrome or Safari browser for best results</li>
+              <li>• If network errors occur, check your connection and try again</li>
               <li>• Recording continues until you click stop</li>
               <li>• Edit transcription if needed, then save your note</li>
             </ul>
