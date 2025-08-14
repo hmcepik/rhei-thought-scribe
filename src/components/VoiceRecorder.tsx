@@ -21,7 +21,7 @@ const VoiceRecorder = () => {
   useEffect(() => {
     // Check if speech recognition is supported
     if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-      toast.error("Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.");
+      toast.error("Speech recognition requires Chrome, Edge, or Safari. On mobile, please use Chrome or Safari browser.");
       return;
     }
 
@@ -34,7 +34,7 @@ const VoiceRecorder = () => {
 
     recognition.onstart = () => {
       setIsRecording(true);
-      toast.success("Recording started");
+      toast.success("Recording started - speak clearly");
     };
 
     recognition.onresult = (event) => {
@@ -83,7 +83,20 @@ const VoiceRecorder = () => {
       setTranscription("");
       setCurrentTranscript("");
       setSummary("");
-      recognitionRef.current.start();
+      
+      // Request microphone permission explicitly on mobile
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(() => {
+            recognitionRef.current?.start();
+          })
+          .catch((error) => {
+            console.error('Microphone permission denied:', error);
+            toast.error("Microphone access is required. Please allow microphone permission and try again.");
+          });
+      } else {
+        recognitionRef.current.start();
+      }
     }
   };
 
@@ -239,7 +252,9 @@ const VoiceRecorder = () => {
             <h4 className="font-medium mb-2">How to use:</h4>
             <ul className="text-sm text-muted-foreground space-y-1">
               <li>• Click the record button to start voice recording</li>
+              <li>• Allow microphone access when prompted</li>
               <li>• Speak clearly - transcription appears in real-time</li>
+              <li>• On mobile: Use Chrome or Safari browser for best results</li>
               <li>• Recording continues until you click stop</li>
               <li>• Edit transcription if needed, then save your note</li>
             </ul>
