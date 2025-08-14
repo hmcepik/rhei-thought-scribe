@@ -133,12 +133,17 @@ const VoiceRecorder = () => {
     const foundTags: string[] = [];
     const lowerText = text.toLowerCase();
     
+    console.log('Generating tags for text:', lowerText);
+    
     Object.entries(keywords).forEach(([category, words]) => {
-      if (words.some(word => lowerText.includes(word))) {
+      const matchedWords = words.filter(word => lowerText.includes(word));
+      if (matchedWords.length > 0) {
+        console.log(`Found category "${category}" with words:`, matchedWords);
         foundTags.push(category);
       }
     });
     
+    console.log('Generated tags:', foundTags);
     return foundTags;
   };
 
