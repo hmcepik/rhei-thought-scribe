@@ -13,21 +13,10 @@ const VoiceRecorder = () => {
   const [transcription, setTranscription] = useState("");
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [generatedTags, setGeneratedTags] = useState<string[]>([]);
   const [summary, setSummary] = useState("");
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
-  // Keywords for auto-tagging
-  const keywords = {
-    'Marketing': ['marketing', 'campaign', 'brand', 'customer', 'sales', 'promotion', 'advertising', 'social media', 'content', 'seo', 'analytics'],
-    'Engineering': ['code', 'development', 'software', 'technical', 'bug', 'programming', 'api', 'database', 'frontend', 'backend', 'deployment'],
-    'Meeting': ['meeting', 'discussion', 'agenda', 'notes', 'decision', 'action', 'follow-up', 'call', 'conference', 'sync', 'standup'],
-    'Project': ['project', 'timeline', 'milestone', 'deadline', 'task', 'deliverable', 'presentation', 'powerpoint', 'slides', 'demo', 'proposal'],
-    'Finance': ['budget', 'cost', 'revenue', 'financial', 'money', 'expense', 'profit', 'invoice', 'payment', 'pricing'],
-    'HR': ['team', 'hiring', 'employee', 'training', 'performance', 'review', 'staff', 'onboarding', 'interview'],
-    'Personal': ['idea', 'thought', 'reminder', 'todo', 'personal', 'note', 'remember', 'inspiration', 'brainstorm'],
-  };
 
   useEffect(() => {
     // Check if speech recognition is supported
@@ -93,7 +82,6 @@ const VoiceRecorder = () => {
     if (recognitionRef.current && !isRecording) {
       setTranscription("");
       setCurrentTranscript("");
-      setGeneratedTags([]);
       setSummary("");
       recognitionRef.current.start();
     }
@@ -105,23 +93,6 @@ const VoiceRecorder = () => {
     }
   };
 
-  const generateTags = (text: string): string[] => {
-    const foundTags: string[] = [];
-    const lowerText = text.toLowerCase();
-    
-    console.log('Generating tags for text:', lowerText);
-    
-    Object.entries(keywords).forEach(([category, words]) => {
-      const matchedWords = words.filter(word => lowerText.includes(word));
-      if (matchedWords.length > 0) {
-        console.log(`Found category "${category}" with words:`, matchedWords);
-        foundTags.push(category);
-      }
-    });
-    
-    console.log('Generated tags:', foundTags);
-    return foundTags;
-  };
 
   const generateSummary = (text: string): string => {
     if (text.length < 50) return "";
@@ -144,15 +115,14 @@ const VoiceRecorder = () => {
 
     setIsProcessing(true);
     
-    // Generate tags and summary
-    const tags = generateTags(transcription);
+    // Generate summary
     const noteSummary = generateSummary(transcription);
     
     const note: VoiceNote = {
       id: Date.now().toString(),
       transcription: transcription.trim(),
       summary: noteSummary || undefined,
-      tags: tags,
+      tags: [],
       timestamp: new Date(),
     };
 
@@ -161,8 +131,6 @@ const VoiceRecorder = () => {
     const updatedNotes = [note, ...existingNotes];
     localStorage.setItem('rhei-voice-notes', JSON.stringify(updatedNotes));
 
-    setGeneratedTags(tags);
-    setSummary(noteSummary);
     setIsProcessing(false);
     
     toast.success("Note saved successfully!");
@@ -170,7 +138,6 @@ const VoiceRecorder = () => {
     // Reset for next recording
     setTimeout(() => {
       setTranscription("");
-      setGeneratedTags([]);
       setSummary("");
     }, 2000);
   };
@@ -234,18 +201,6 @@ const VoiceRecorder = () => {
                   />
                 </div>
 
-                {generatedTags.length > 0 && (
-                  <div>
-                    <h4 className="font-medium mb-2">Auto-generated Tags</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {generatedTags.map((tag) => (
-                        <Badge key={tag} className="tag-badge">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 {summary && (
                   <div>
@@ -286,7 +241,6 @@ const VoiceRecorder = () => {
               <li>• Speak clearly - transcription appears in real-time</li>
               <li>• Recording continues until you click stop</li>
               <li>• Edit transcription if needed, then save your note</li>
-              <li>• Tags and summaries are generated automatically</li>
             </ul>
           </CardContent>
         </Card>

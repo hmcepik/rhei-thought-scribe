@@ -2,16 +2,15 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Search, Copy, Trash2, Edit3, Save, X, Calendar, Hash, FileText } from "lucide-react";
+import { Search, Copy, Trash2, Edit3, Save, X, Calendar, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { VoiceNote } from "@/types/VoiceNote";
 
 const HistoryPage = () => {
   const [notes, setNotes] = useState<VoiceNote[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTag, setSelectedTag] = useState("");
+  
   const [editingNote, setEditingNote] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
 
@@ -31,16 +30,12 @@ const HistoryPage = () => {
   };
 
   const filteredNotes = notes.filter(note => {
-    const matchesSearch = !searchTerm || 
+    return !searchTerm || 
       note.transcription.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (note.summary && note.summary.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesTag = !selectedTag || note.tags.includes(selectedTag);
-    
-    return matchesSearch && matchesTag;
   });
 
-  const allTags = Array.from(new Set(notes.flatMap(note => note.tags))).sort();
+  
 
   const deleteNote = (id: string) => {
     if (window.confirm("Are you sure you want to delete this note?")) {
@@ -95,7 +90,6 @@ ${note.summary}
   const stats = {
     total: notes.length,
     filtered: filteredNotes.length,
-    totalTags: allTags.length,
     withSummary: notes.filter(note => note.summary).length
   };
 
@@ -108,12 +102,11 @@ ${note.summary}
             <h2 className="text-2xl font-bold">Voice Notes History</h2>
             <p className="text-muted-foreground">
               {stats.filtered} of {stats.total} notes 
-              {selectedTag && ` tagged "${selectedTag}"`}
               {searchTerm && ` matching "${searchTerm}"`}
             </p>
           </div>
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-center">
             <div className="bg-card p-3 rounded-lg border">
               <div className="flex items-center justify-center space-x-1 text-rhei-primary">
                 <FileText className="w-4 h-4" />
@@ -123,10 +116,10 @@ ${note.summary}
             </div>
             <div className="bg-card p-3 rounded-lg border">
               <div className="flex items-center justify-center space-x-1 text-rhei-primary">
-                <Hash className="w-4 h-4" />
-                <span className="font-semibold">{stats.totalTags}</span>
+                <Search className="w-4 h-4" />
+                <span className="font-semibold">{stats.filtered}</span>
               </div>
-              <p className="text-xs text-muted-foreground">Unique Tags</p>
+              <p className="text-xs text-muted-foreground">Showing</p>
             </div>
             <div className="bg-card p-3 rounded-lg border">
               <div className="flex items-center justify-center space-x-1 text-rhei-primary">
@@ -134,13 +127,6 @@ ${note.summary}
                 <span className="font-semibold">{stats.withSummary}</span>
               </div>
               <p className="text-xs text-muted-foreground">Summarized</p>
-            </div>
-            <div className="bg-card p-3 rounded-lg border">
-              <div className="flex items-center justify-center space-x-1 text-rhei-primary">
-                <Search className="w-4 h-4" />
-                <span className="font-semibold">{stats.filtered}</span>
-              </div>
-              <p className="text-xs text-muted-foreground">Filtered</p>
             </div>
           </div>
         </div>
@@ -159,26 +145,6 @@ ${note.summary}
                     className="pl-10"
                   />
                 </div>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={selectedTag === "" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedTag("")}
-                >
-                  All Tags
-                </Button>
-                {allTags.map(tag => (
-                  <Button
-                    key={tag}
-                    variant={selectedTag === tag ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedTag(selectedTag === tag ? "" : tag)}
-                  >
-                    {tag}
-                  </Button>
-                ))}
               </div>
             </div>
           </CardContent>
@@ -280,23 +246,6 @@ ${note.summary}
                       <h4 className="font-medium mb-2">Summary</h4>
                       <div className="bg-rhei-primary/5 p-3 rounded-md">
                         <pre className="text-sm whitespace-pre-wrap">{note.summary}</pre>
-                      </div>
-                    </div>
-                  )}
-
-                  {note.tags.length > 0 && (
-                    <div>
-                      <h4 className="font-medium mb-2">Tags</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {note.tags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            className="tag-badge cursor-pointer"
-                            onClick={() => setSelectedTag(tag)}
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
                       </div>
                     </div>
                   )}
