@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { History, Mic } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const RHEIHeader = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const RHEIHeader = () => {
     <header className="border-b bg-card">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-rhei-primary to-rhei-primary-light flex items-center justify-center">
               <Mic className="w-6 h-6 text-white" />
             </div>
@@ -20,7 +20,7 @@ const RHEIHeader = () => {
               <h1 className="text-xl font-bold text-foreground">RHEI Voice Notes</h1>
               <p className="text-sm text-muted-foreground">Capture ideas at the speed of thought</p>
             </div>
-          </div>
+          </Link>
           
           <div className="flex items-center space-x-2">
             <Button
