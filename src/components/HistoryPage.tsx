@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Search, Mail, Copy, Trash2, Edit3, Save, X, Calendar, Hash, FileText } from "lucide-react";
+import { Search, Copy, Trash2, Edit3, Save, X, Calendar, Hash, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { VoiceNote } from "@/types/VoiceNote";
 
@@ -72,32 +72,6 @@ const HistoryPage = () => {
     setEditText("");
   };
 
-  const shareViaEmail = (note: VoiceNote) => {
-    const subject = `RHEI Voice Note - ${note.timestamp.toLocaleDateString()}`;
-    const body = `Voice Note from RHEI Voice Notes
-
-Recorded: ${note.timestamp.toLocaleString()}
-
-Transcription:
-${note.transcription}
-
-${note.summary ? `Summary:
-${note.summary}
-
-` : ''}${note.tags.length > 0 ? `Tags: ${note.tags.join(', ')}` : ''}
-
----
-Sent via RHEI Voice Notes`;
-
-    const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    try {
-      window.location.href = mailtoUrl;
-    } catch (error) {
-      // Fallback to clipboard if mailto fails
-      copyToClipboard(note);
-    }
-  };
 
   const copyToClipboard = async (note: VoiceNote) => {
     const content = `Voice Note - ${note.timestamp.toLocaleString()}
@@ -249,13 +223,6 @@ ${note.summary}
                         disabled={editingNote === note.id}
                       >
                         <Edit3 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => shareViaEmail(note)}
-                      >
-                        <Mail className="w-4 h-4" />
                       </Button>
                       <Button
                         variant="ghost"
