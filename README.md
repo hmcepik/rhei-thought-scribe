@@ -143,25 +143,10 @@ Open [http://localhost:8080](http://localhost:8080) and grant microphone permiss
 - Real-time feedback building user confidence
 - Confirmation dialogs preventing accidental data loss
 
-## 💼 Business Impact
-
-### ROI Projection
-- **Target:** 50 employees × 20 minutes daily usage
-- **Value Creation:** 1000+ daily productivity minutes
-- **Implementation Cost:** Zero (browser-native APIs)
-- **Compelling business case** for enhanced feature investment
-
 ### Risk Management
 - Browser-native implementation eliminates vendor lock-in
 - Local-first storage prevents privacy concerns
 - Modular architecture supports evolution without breaking workflows
-
-## 🤝 Contributing
-
-This project was built as part of RHEI's AI Product Builder technical assessment, demonstrating:
-- Strategic product thinking for internal productivity tools
-- Rapid prototyping with enterprise scalability planning
-- User-centric design with measurable business impact
 
 ---
 
